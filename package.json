@@ -1,5 +1,5 @@
 {
-  "name": "node-elm",
+  "name": "jpos-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,13 +10,13 @@
     "dev": "cross-env NODE_ENV=development supervisor --harmony index.js",
     "local": "cross-env NODE_ENV=local supervisor  --harmony index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production pm2 start index.js --node-args='--harmony' --name 'node-elm'",
-    "stop": "cross-env NODE_ENV=production pm2 stop index.js --name 'node-elm'",
-    "restart": "cross-env NODE_ENV=production pm2 restart index.js --node-args='--harmony' --name 'node-elm'"
+    "start": "cross-env NODE_ENV=production pm2 start index.js --node-args='--harmony' --name 'jpos-api'",
+    "stop": "cross-env NODE_ENV=production pm2 stop index.js --name 'jpos-api'",
+    "restart": "cross-env NODE_ENV=production pm2 restart index.js --node-args='--harmony' --name 'jpos-api'"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bailicangdu/node-elm"
+    "url": "https://github.com/RuanShan/jpos-api"
   },
   "dependencies": {
     "babel": "^6.23.0",
@@ -43,6 +43,7 @@
     "moment": "^2.18.1",
     "mongodb": "^2.2.25",
     "mongoose": "^4.9.3",
+    "morgan": "^1.9.0",
     "node-fetch": "^1.6.3",
     "pinyin": "^2.8.3",
     "pm2": "^2.8.0",
