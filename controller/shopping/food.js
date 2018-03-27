@@ -10,14 +10,14 @@ class Food extends BaseComponent{
 		super();
 		this.defaultData = [{
 			name: '热销榜',
-			description: '大家喜欢吃，才叫真好吃。', 
+			description: '大家喜欢吃，才叫真好吃。',
 			icon_url: "5da3872d782f707b4c82ce4607c73d1ajpeg",
 			is_selected: true,
 			type: 1,
 			foods: [],
 		}, {
 			name: '优惠',
-			description: '美味又实惠, 大家快来抢!', 
+			description: '美味又实惠, 大家快来抢!',
 			icon_url: "4735c4342691749b8e1a531149a46117jpeg",
 			type: 1,
 			foods: [],
@@ -67,6 +67,45 @@ class Food extends BaseComponent{
 			})
 		}
 	}
+	async updateCategory(req, res, next){
+		const form = new formidable.IncomingForm();
+		form.parse(req, async (err, fields, files) => {
+			if (err) {
+				console.log('获取食品信息form出错', err);
+				res.send({
+					status: 0,
+					type: 'ERROR_FORM',
+					message: '表单信息错误',
+				})
+				return
+			}
+			const {name, item_id, description = ""} = fields;
+			try{
+				if (!name) {
+					throw new Error('食品种类名称错误');
+				}else if(!item_id || !Number(item_id)){
+					throw new Error('食品种类ID错误');
+				}
+
+				let newData;
+
+				newData = {name, description};
+				const menu = await MenuModel.findOneAndUpdate({item_id}, {$set: newData});
+
+				res.send({
+					status: 1,
+					success: '修改食品信息成功',
+				})
+			}catch(err){
+				console.log(err.message, err);
+				res.send({
+					status: 0,
+					type: 'ERROR_UPDATE_FOOD',
+					message: '更新食品信息失败',
+				})
+			}
+		})
+	}
 	async addCategory(req, res, next){
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
@@ -98,8 +137,8 @@ class Food extends BaseComponent{
 			}
 			const foodObj = {
 				name: fields.name,
-				description: fields.description, 
-				restaurant_id: fields.restaurant_id, 
+				description: fields.description,
+				restaurant_id: fields.restaurant_id,
 				id: category_id,
 				foods: [],
 			}
@@ -202,13 +241,13 @@ class Food extends BaseComponent{
 				fields.attributes.forEach(item => {
 					let attr;
 					switch(item){
-						case '新': 
+						case '新':
 							attr = {
 								icon_color: '5ec452',
 								icon_name: '新'
 							}
 							break;
-						case '招牌': 
+						case '招牌':
 							attr = {
 								icon_color: 'f07373',
 								icon_name: '招牌'
@@ -337,6 +376,30 @@ class Food extends BaseComponent{
 			})
 		}
 	}
+
+	async getMenusCount(req, res, next){
+		const restaurant_id = req.query.restaurant_id;
+		try{
+			let filter = {};
+			if (restaurant_id && Number(restaurant_id)) {
+				filter = {restaurant_id}
+			}
+
+			const count = await MenuModel.find(filter).count();
+			res.send({
+				status: 1,
+				count,
+			})
+		}catch(err){
+			console.log('获取食品数量失败', err);
+			res.send({
+				status: 0,
+				type: 'ERROR_TO_GET_COUNT',
+				message: '获取食品数量失败'
+			})
+		}
+	}
+
 	async getMenuDetail(req, res, next){
 		const category_id = req.params.category_id;
 		if (!category_id || !Number(category_id)) {
@@ -411,7 +474,7 @@ class Food extends BaseComponent{
 					type: 'ERROR_FORM',
 					message: '表单信息错误',
 				})
-				return 
+				return
 			}
 			const {name, item_id, description = "", image_path, category_id, new_category_id} = fields;
 			try{
@@ -473,7 +536,7 @@ class Food extends BaseComponent{
 				type: 'ERROR_PARAMS',
 				message: 'food_id参数错误',
 			})
-			return 
+			return
 		}
 		try{
 			const food = await FoodModel.findOne({item_id: food_id});

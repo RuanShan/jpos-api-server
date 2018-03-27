@@ -19,6 +19,7 @@ router.get('/getcategory/:restaurant_id', Food.getCategory);
 router.post('/addcategory', Check.checkAdmin, Food.addCategory);
 router.get('/v2/menu', Food.getMenu);
 router.get('/v2/menu/:category_id', Food.getMenuDetail);
+router.get('/v2/menus/count', Food.getMenusCount);
 router.get('/v2/foods', Food.getFoods);
 router.get('/v2/foods/count', Food.getFoodsCount);
 router.post('/v2/updatefood', Check.checkAdmin, Food.updateFood);
