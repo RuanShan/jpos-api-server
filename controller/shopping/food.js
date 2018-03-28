@@ -79,18 +79,18 @@ class Food extends BaseComponent{
 				})
 				return
 			}
-			const {name, item_id, description = ""} = fields;
+			const {name, id, description = ""} = fields;
 			try{
 				if (!name) {
 					throw new Error('食品种类名称错误');
-				}else if(!item_id || !Number(item_id)){
+				}else if(!id || !Number(id)){
 					throw new Error('食品种类ID错误');
 				}
 
 				let newData;
 
 				newData = {name, description};
-				const menu = await MenuModel.findOneAndUpdate({item_id}, {$set: newData});
+				const menu = await MenuModel.findOneAndUpdate({id}, {$set: newData});
 
 				res.send({
 					status: 1,
